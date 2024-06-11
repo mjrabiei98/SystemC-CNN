@@ -66,7 +66,8 @@ void testbench::displaying()
 			//cout << A << " / " << B << " => Quotient = " << Q << " & Remainder = " << R << " - Time : " << sc_time_stamp() << endl;
 		//std::cout << "output" << q << endl;
 		//std::cout << "tesssst" << sel.read().to_uint() << endl;
-		std::cout << "ram value = " << data_out << "address" << address_in_read << endl;
+		std::cout << "ram value = " << data_out << endl;
 		wait();
 	}
 }
+

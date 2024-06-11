@@ -15,6 +15,10 @@ SC_MODULE(testbench) {
 	sc_signal<sc_logic> done;
 	sc_signal<sc_lv<3>> output_pattern;*/
 
+	kernel_type kernels_array;
+	bias_array biases;
+	sc_lv<8> image_size;
+
 
 	sc_signal<sc_logic> start;
 	sc_signal<sc_logic> clk;
@@ -23,6 +27,9 @@ SC_MODULE(testbench) {
 	sc_signal<sc_lv<8>> a, b, c, d, e;
 	sc_signal<sc_lv<3>> sel;
 	sc_signal<sc_lv<8>> out;
+	sc_signal<sc_logic> write_ram;
+	sc_signal<sc_lv<3>> output_pattern;
+	sc_signal<sc_logic> done;
 
 	sc_signal<sc_lv<8>> counter_out;
 	sc_signal<sc_logic> cout;
@@ -46,12 +53,16 @@ SC_MODULE(testbench) {
 	ram* ram1;
 
 	reg<16>* r1;
+
+	
+
+	patter_finder* p_finder;
 	
 
 	// Constructor
 	SC_CTOR(testbench) {
 		// Instantiate the patter_finder module
-		/*p_finder = new patter_finder("p_finder");
+		p_finder = new patter_finder("p_finder", kernels_array, biases, image_size);
 		p_finder->clk(clk);
 		p_finder->rst(rst);
 		p_finder->start(start);
@@ -59,7 +70,7 @@ SC_MODULE(testbench) {
 		p_finder->data_in(data_in);
 		p_finder->address_in_wr(address_in_wr);
 		p_finder->done(done);
-		p_finder->output_pattern(output_pattern);*/
+		p_finder->output_pattern(output_pattern);
 
 		m1 = new mux_5to1("mux1");
 
@@ -87,19 +98,14 @@ SC_MODULE(testbench) {
 		r1->d(m);
 		r1->q(q);
 
-		ram1 = new ram("ram_1");
-		/*
-		sc_in<sc_lv<8>> data_in;
-	sc_in<sc_lv<8>> address_in_wr, address_in_read;
-	sc_in<sc_logic> write_en, read_en;
-	sc_out<sc_lv<8>> data_out;*/
+		/*ram1 = new ram("ram_1");
 		ram1->rst(rst);
 		ram1->data_in(data_in);
 		ram1->address_in_wr(address_in_wr);
 		ram1->address_in_read(address_in_read);
 		ram1->write_en(write_en);
 		ram1->read_en(read_en);
-		ram1->data_out(data_out);
+		ram1->data_out(data_out);*/
 
 
 
@@ -116,8 +122,12 @@ SC_MODULE(testbench) {
 		SC_THREAD(clocking);
 		SC_THREAD(inGenerating);
 		SC_THREAD(displaying);
-			sensitive << clk;
+			sensitive << done;
 		//sensitive << done;
+	}
+
+	testbench(sc_module_name name, kernel_type kernels_array, bias_array biases, sc_lv<8> image_size){
+	
 	}
 
 	void resetting();

@@ -54,29 +54,33 @@ SC_MODULE(convolution_datapath) {
 	kernel_mux* kernel_mux1;
 
 	void instantiate_modules() {
+		
+	}
+
+	SC_CTOR(convolution_datapath){
 		// Instantiate counters
-		counter_i = new counter("counter_i",3);
+		counter_i = new counter("counter_i", 3);
 		counter_i->clk(clk);
 		counter_i->rst(rst);
 		counter_i->en(en_cti);
 		counter_i->counter_out(counter_i_out);
 		counter_i->cout(cnt_i_cout);
 
-		counter_j = new counter("counter_j",3);
+		counter_j = new counter("counter_j", 3);
 		counter_j->clk(clk);
 		counter_j->rst(rst);
 		counter_j->en(en_ctj);
 		counter_j->counter_out(counter_j_out);
 		counter_j->cout(counter_j_cout);
 
-		counter_x = new counter("counter_x",2);
+		counter_x = new counter("counter_x", 2);
 		counter_x->clk(clk);
 		counter_x->rst(rst);
 		counter_x->en(en_ctx);
 		counter_x->counter_out(counter_x_out);
 		counter_x->cout(cnt_x_cout);
 
-		counter_y = new counter("counter_y",2);
+		counter_y = new counter("counter_y", 2);
 		counter_y->clk(clk);
 		counter_y->rst(rst);
 		counter_y->en(en_cty);
@@ -195,15 +199,11 @@ SC_MODULE(convolution_datapath) {
 		kernel_mux1->output(kernel_mux_out);
 	}
 
-	SC_CTOR(convolution_datapath)
-		: bias_value("00000000"),
-		image_size("00000100"),
-		kernet_1("00000000"), kernet_2("00000000"), kernet_3("00000000"),
-		kernet_4("00000000"), kernet_5("00000000"), kernet_6("00000000"),
-		kernet_7("00000000"), kernet_8("00000000"), kernet_9("00000000"),
-		data_width(8) {
-		instantiate_modules();
-	}
+	convolution_datapath(sc_module_name name, sc_lv<8> bias_value, sc_lv<8> image_size,
+		sc_lv<8> kernet_1, sc_lv<8> kernet_2, sc_lv<8> kernet_3,
+		sc_lv<8> kernet_4, sc_lv<8> kernet_5, sc_lv<8> kernet_6,
+		sc_lv<8> kernet_7, sc_lv<8> kernet_8, sc_lv<8> kernet_9){}
+
 };
 
 
@@ -407,15 +407,12 @@ SC_MODULE(convolution) {
 	convolution_controller* controller;
 
 	// Constructor
-	SC_CTOR(convolution)
-		: bias_value("00000000"),
-		image_size("00000100"),
-		kernet_1("00000000"), kernet_2("00000000"), kernet_3("00000000"),
-		kernet_4("00000000"), kernet_5("00000000"), kernet_6("00000000"),
-		kernet_7("00000000"), kernet_8("00000000"), kernet_9("00000000"),
-		data_width(8) {
+	SC_CTOR(convolution){
 		// Instantiate submodules
-		datapath = new convolution_datapath("convolution_datapath");
+		datapath = new convolution_datapath("convolution_datapath", bias_value, image_size,
+			kernet_1, kernet_2, kernet_3,
+			kernet_4, kernet_5, kernet_6,
+			kernet_7, kernet_8, kernet_9);
 		datapath->clk(clk);
 		datapath->rst(rst);
 		datapath->en_cti(en_cti);
@@ -479,6 +476,11 @@ SC_MODULE(convolution) {
 		controller->done(done);
 		controller->rst_temp(rst_temp);
 	}
+
+	convolution(sc_module_name name, sc_lv<8> bias_value, sc_lv<8> image_size,
+		sc_lv<8> kernet_1, sc_lv<8> kernet_2, sc_lv<8> kernet_3,
+		sc_lv<8> kernet_4, sc_lv<8> kernet_5, sc_lv<8> kernet_6,
+		sc_lv<8> kernet_7, sc_lv<8> kernet_8, sc_lv<8> kernet_9);
 
 };
 
