@@ -5,19 +5,11 @@
 #include <iostream>
 
 SC_MODULE(testbench) {
-	// Signals
-	/*sc_signal<sc_logic> start;
-	sc_signal<sc_logic> clk;
-	sc_signal<sc_logic> rst;
-	sc_signal<sc_logic> write_ram;
-	sc_signal<sc_lv<8>> data_in;
-	sc_signal<sc_lv<8>> address_in_wr;
-	sc_signal<sc_logic> done;
-	sc_signal<sc_lv<3>> output_pattern;*/
 
-	kernel_type kernels_array;
-	bias_array biases;
-	sc_lv<8> image_size;
+
+	/*sc_signal<sc_lv<8>> sig_kernels_array[3 * 9];
+	sc_signal<sc_lv<8>> sig_biases[3];*/
+	sc_signal<sc_lv<8>> sig_image_size;
 
 
 	sc_signal<sc_logic> start;
@@ -47,7 +39,7 @@ SC_MODULE(testbench) {
 
 
 	// Instance of the patter_finder module
-	//patter_finder* p_finder;
+	patter_finder* p_finder;
 	mux_5to1* m1;
 	counter* c1;
 	ram* ram1;
@@ -56,13 +48,14 @@ SC_MODULE(testbench) {
 
 	
 
-	patter_finder* p_finder;
+	//patter_finder* p_finder;
 	
 
 	// Constructor
 	SC_CTOR(testbench) {
 		// Instantiate the patter_finder module
-		p_finder = new patter_finder("p_finder", kernels_array, biases, image_size);
+		p_finder = new patter_finder("p_finder");
+		p_finder->image_size(sig_image_size);
 		p_finder->clk(clk);
 		p_finder->rst(rst);
 		p_finder->start(start);
@@ -124,10 +117,6 @@ SC_MODULE(testbench) {
 		SC_THREAD(displaying);
 			sensitive << done;
 		//sensitive << done;
-	}
-
-	testbench(sc_module_name name, kernel_type kernels_array, bias_array biases, sc_lv<8> image_size){
-	
 	}
 
 	void resetting();

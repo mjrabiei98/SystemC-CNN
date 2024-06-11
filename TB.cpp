@@ -29,6 +29,7 @@ void testbench::inGenerating()
 {
 	while (true)
 	{
+		sig_image_size = "00000100";
 
 		a = "00000000";
 		b = "00000000";

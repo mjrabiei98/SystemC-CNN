@@ -15,30 +15,12 @@ SC_MODULE(patter_finder) {
 	static const int data_width = 8;
 	static const int number_of_conv = 3;
 	static const int kernel_size = 3;
-	/*kernel_type kernels_array = {
-		{
-			"00000000", "00000001", "00000000",
-			"00000001", "00000001", "00000001",
-			"00000000", "00000001", "00000000"
-		},
-		{
-			"00000001", "00000001", "00000001",
-			"00000001", "00000000", "00000000",
-			"00000001", "00000001", "00000001"
-		},
-		{
-			"00000001", "00000001", "00000001",
-			"00000000", "00000001", "00000000",
-			"00000000", "00000001", "00000000"
-		}
-	};
-	bias_array biases = { "11111111", "11111110", "11111110" };
-	sc_lv<8> image_size = "00000100";*/
 
-	kernel_type kernels_array;
-	bias_array biases;
-	sc_lv<8> image_size;
+	// Inputs
+	sc_signal<sc_lv<8>> kernels_array[3*9];
+	sc_signal<sc_lv<8>> biases[3];
 
+	sc_in<sc_lv<8>> image_size;
 
 	// Ports
 	sc_in<sc_logic> clk, rst, start, write_ram;
@@ -55,12 +37,17 @@ SC_MODULE(patter_finder) {
 	sc_signal<sc_lv<data_width>> relus_output[number_of_conv][4];
 	sc_signal<sc_lv<data_width>> maxpools_output[number_of_conv];
 
+	sc_signal<sc_lv<8>> temp_adr[number_of_conv];
+	sc_signal<sc_logic> temp_done[number_of_conv];
+
 	// Submodule instances
 	ram* ram1;
 	convolution* conv[number_of_conv];
 	relu* relu_units[number_of_conv];
 	maxpool* maxpool_units[number_of_conv];
 	resualt* result_unit;
+
+	void do_kernel_bias();
 
 	// Constructor
 	SC_CTOR(patter_finder) {
@@ -73,10 +60,25 @@ SC_MODULE(patter_finder) {
 		ram1->data_out(ram_data_out);
 		ram1->write_en(write_en);
 		ram1->read_en(read_en);
+		SC_METHOD(do_kernel_bias);
+
+		
 
 		// Instantiate convolution, relu, and maxpool modules
 		for (int i = 0; i < number_of_conv; ++i) {
-			conv[i] = new convolution("conv" + i);
+			std::string conv_name = "conv" + std::to_string(i);
+			conv[i] = new convolution(conv_name.c_str());
+			conv[i]->bias_value(biases[i]);
+			conv[i]->image_size(image_size);
+			conv[i]->kernet_1(kernels_array[i * 9 + 0]);
+			conv[i]->kernet_2(kernels_array[i * 9 + 1]);
+			conv[i]->kernet_3(kernels_array[i * 9 + 2]);
+			conv[i]->kernet_4(kernels_array[i * 9 + 3]);
+			conv[i]->kernet_5(kernels_array[i * 9 + 4]);
+			conv[i]->kernet_6(kernels_array[i * 9 + 5]);
+			conv[i]->kernet_7(kernels_array[i * 9 + 6]);
+			conv[i]->kernet_8(kernels_array[i * 9 + 7]);
+			conv[i]->kernet_9(kernels_array[i * 9 + 8]);
 			conv[i]->clk(clk);
 			conv[i]->rst(rst);
 			conv[i]->start(start);
@@ -85,10 +87,15 @@ SC_MODULE(patter_finder) {
 			conv[i]->data_out2(convs_output[i][1]);
 			conv[i]->data_out3(convs_output[i][2]);
 			conv[i]->data_out4(convs_output[i][3]);
-			conv[i]->done(done);
-			conv[i]->address_out(address_out);
+			if (i != 0){
+				conv[i]->done(temp_done[i]);
+				conv[i]->address_out(temp_adr[i]);
+			}
 
-			relu_units[i] = new relu("relu" + i);
+			
+
+			std::string relu_name = "relu" + std::to_string(i);
+			relu_units[i] = new relu(relu_name.c_str());
 			relu_units[i]->a(convs_output[i][0]);
 			relu_units[i]->b(convs_output[i][1]);
 			relu_units[i]->c(convs_output[i][2]);
@@ -98,14 +105,16 @@ SC_MODULE(patter_finder) {
 			relu_units[i]->d3(relus_output[i][2]);
 			relu_units[i]->d4(relus_output[i][3]);
 
-			maxpool_units[i] = new maxpool("maxpool" + i);
+			std::string maxpool_name = "maxpool" + std::to_string(i);
+			maxpool_units[i] = new maxpool(maxpool_name.c_str());
 			maxpool_units[i]->a(relus_output[i][0]);
 			maxpool_units[i]->b(relus_output[i][1]);
 			maxpool_units[i]->c(relus_output[i][2]);
 			maxpool_units[i]->d(relus_output[i][3]);
 			maxpool_units[i]->output(maxpools_output[i]);
 		}
-
+		conv[0]->address_out(address_out);
+		conv[0]->done(done);
 		// Instantiate result unit
 		result_unit = new resualt("result_unit");
 		result_unit->a(maxpools_output[0]);
@@ -113,11 +122,6 @@ SC_MODULE(patter_finder) {
 		result_unit->c(maxpools_output[2]);
 		result_unit->output(output_pattern);
 	}
-
-	patter_finder(sc_module_name name, kernel_type kernels_array, bias_array biases, sc_lv<8> image_size){
-	
-	}
-
 };
 
-#endif
+#endif // PF_H
