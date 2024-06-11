@@ -31,12 +31,19 @@ SC_MODULE(testbench) {
 	sc_signal<sc_lv<16>> q;
 
 
+	sc_signal<sc_lv<8>> data_in;
+	sc_signal<sc_lv<8>> address_in_wr, address_in_read;
+	sc_signal<sc_logic> write_en, read_en;
+	sc_signal<sc_lv<8>> data_out;
+
+
 
 
 	// Instance of the patter_finder module
 	//patter_finder* p_finder;
 	mux_5to1* m1;
 	counter* c1;
+	ram* ram1;
 
 	reg<16>* r1;
 	
@@ -79,6 +86,21 @@ SC_MODULE(testbench) {
 		r1->en(en);
 		r1->d(m);
 		r1->q(q);
+
+		ram1 = new ram("ram_1");
+		/*
+		sc_in<sc_lv<8>> data_in;
+	sc_in<sc_lv<8>> address_in_wr, address_in_read;
+	sc_in<sc_logic> write_en, read_en;
+	sc_out<sc_lv<8>> data_out;*/
+		ram1->rst(rst);
+		ram1->data_in(data_in);
+		ram1->address_in_wr(address_in_wr);
+		ram1->address_in_read(address_in_read);
+		ram1->write_en(write_en);
+		ram1->read_en(read_en);
+		ram1->data_out(data_out);
+
 
 
 		// Initialize signals

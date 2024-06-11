@@ -14,17 +14,17 @@ SC_MODULE(ram) {
 	static const int number_of_rows = 16;
 
 	// Ports
-	sc_in<bool> rst;
+	sc_in<sc_logic> rst;
 	sc_in<sc_lv<DATA_WIDTH>> data_in;
 	sc_in<sc_lv<DATA_WIDTH>> address_in_wr, address_in_read;
-	sc_in<bool> write_en, read_en;
+	sc_in<sc_logic> write_en, read_en;
 	sc_out<sc_lv<DATA_WIDTH>> data_out;
 
 	// Memory array
 	sc_lv<DATA_WIDTH> mem[number_of_rows];
 
 	// Internal signals
-	sc_signal<bool> init_done;
+	//sc_signal<sc_logic> init_done;
 
 	// Process method for initialization and writing to memory
 	void do_ram();
@@ -35,10 +35,10 @@ SC_MODULE(ram) {
 	// Constructor
 	SC_CTOR(ram) {
 		SC_METHOD(do_ram);
-		sensitive << rst << write_en << address_in_wr << data_in;
+		//sensitive << rst;
 		SC_METHOD(do_read);
 		sensitive << address_in_read << read_en;
-		init_done.write(false);
+		//init_done.write(SC_LOGIC_0);
 	}
 };
 

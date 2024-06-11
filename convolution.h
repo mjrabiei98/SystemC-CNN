@@ -212,12 +212,12 @@ SC_MODULE(convolution_datapath) {
 SC_MODULE(convolution_controller) {
 	// Ports
 	sc_in<sc_logic> clk, rst, start;
-	sc_out<sc_logic> en_cti, en_ctj, en_ctx, en_cty, temp_reg_en, address_reg_en, out1_reg_en, out2_reg_en, out3_reg_en, out4_reg_en;
 	sc_in<sc_logic> counter_i_cout, counter_j_cout, counter_x_cout, counter_y_cout;
+	sc_in<sc_lv<8>> counter_x_out, counter_y_out, counter_i_out, counter_j_out;
+	sc_out<sc_logic> en_cti, en_ctj, en_ctx, en_cty, temp_reg_en, address_reg_en, out1_reg_en, out2_reg_en, out3_reg_en, out4_reg_en;
 	sc_out<sc_lv<2>> adder_mux_1_sel;
 	sc_out<sc_lv<3>> adder_mux_2_sel;
 	sc_out<sc_lv<2>> adr_reg_mux_sel, mult_mux_1_sel, mult_mux_2_sel;
-	sc_in<sc_lv<8>> counter_x_out, counter_y_out, counter_i_out, counter_j_out;
 	sc_out<sc_logic> done;
 	sc_out<sc_logic> rst_temp;
 

@@ -29,22 +29,26 @@ void testbench::inGenerating()
 {
 	while (true)
 	{
+
 		a = "00000000";
 		b = "00000000";
 		c = "10000000";
 		d = "00011000";
 		e = "00011000";
 		sel = "010";
+		address_in_read = "00000000";
 		en.write(SC_LOGIC_1);
 		wait(60, SC_NS);
 
 		sel = "110";
 		m = "001100110011";
+		address_in_read = "00000001";
 		wait(60, SC_NS);
 
 		wait(500, SC_NS);
 		sel = "011";
 		m = "001100000000";
+		address_in_read = "00000011";
 		wait(60, SC_NS);
 
 		wait(500, SC_NS);
@@ -62,7 +66,7 @@ void testbench::displaying()
 			//cout << A << " / " << B << " => Quotient = " << Q << " & Remainder = " << R << " - Time : " << sc_time_stamp() << endl;
 		//std::cout << "output" << q << endl;
 		//std::cout << "tesssst" << sel.read().to_uint() << endl;
-		std::cout << "counter = " << counter_out << endl;
+		std::cout << "ram value = " << data_out << "address" << address_in_read << endl;
 		wait();
 	}
 }
