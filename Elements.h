@@ -222,9 +222,10 @@ SC_MODULE(reg) {
 		if (rst.read() == '1') {
 			q.write(0);
 		}
-		else if (clk.posedge() && en.read() == '1') {
+		else if ((clk->event() && clk.read() == '1') && en.read() == '1') {
 			q.write(d.read());
 		}
+		std::cout << name() << "reg_value = " << q << endl;
 	}
 
 	// Constructor

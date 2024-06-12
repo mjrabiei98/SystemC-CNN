@@ -30,7 +30,7 @@ SC_MODULE(convolution_datapath) {
 	sc_signal<sc_lv<8>> z_signal;
 	sc_signal<sc_lv<8>> kernel_mux_out;
 	sc_signal<sc_lv<8>> adder_mux_1_out, adder_mux_2_out, adr_reg_mux_out;
-	sc_signal<sc_lv<8>> mult_out, adder_out, address_reg_out, mult_mux_1_out, mult_mux_2_out, temp_reg_out;
+	sc_signal<sc_lv<8>> mult_out, adder_out, mult_mux_1_out, mult_mux_2_out, temp_reg_out;
 	sc_signal<sc_logic> cnt_i_cout, cnt_x_cout;
 
 
@@ -57,9 +57,9 @@ SC_MODULE(convolution_datapath) {
 
 	void print(){
 
-		address_out.write(address_reg_out);
+		//address_out.write(address_reg_out);
 
-		std::cout << "value = " << address_out << endl;
+		//std::cout << "address out = " << address_out << endl;
 
 	}
 
@@ -101,7 +101,7 @@ SC_MODULE(convolution_datapath) {
 		adder_mux_1->a(bias_value);
 		adder_mux_1->b(counter_j_out);
 		adder_mux_1->c(temp_reg_out);
-		adder_mux_1->d(address_reg_out);
+		adder_mux_1->d(address_out);
 		adder_mux_1->sel(adder_mux_1_sel);
 		adder_mux_1->out(adder_mux_1_out);
 
@@ -115,7 +115,7 @@ SC_MODULE(convolution_datapath) {
 		adder_mux_2->out(adder_mux_2_out);
 
 		mult_mux_1 = new mux("mult_mux_1");
-		mult_mux_1->a(address_reg_out);
+		mult_mux_1->a(address_out);
 		mult_mux_1->b(kernel_mux_out);
 		mult_mux_1->c(z_signal);
 		mult_mux_1->d(z_signal);
@@ -162,7 +162,7 @@ SC_MODULE(convolution_datapath) {
 		address_reg->rst(rst);
 		address_reg->en(address_reg_en);
 		address_reg->d(adr_reg_mux_out);
-		address_reg->q(address_reg_out);
+		address_reg->q(address_out);
 
 		out1_reg = new reg<8>("out1_reg");
 		out1_reg->clk(clk);
@@ -209,7 +209,7 @@ SC_MODULE(convolution_datapath) {
 		
 
 		SC_METHOD(print);
-		sensitive << address_reg_out;
+		sensitive << clk;
 	}
 
 };
@@ -235,10 +235,11 @@ SC_MODULE(convolution_controller) {
 
 	// State transition process
 	void process_state_transition() {
+		//std::cout << "state = " << pstate << endl;
 		if (rst.read() == true) {
 			pstate.write(idle);
 		}
-		else if (clk.posedge()) {
+		else if (clk == '1' && clk->event()) {
 			pstate.write(nstate.read());
 		}
 	}
@@ -306,6 +307,7 @@ SC_MODULE(convolution_controller) {
 			adder_mux_2_sel.write("011");
 			adr_reg_mux_sel.write("00");
 			address_reg_en.write(SC_LOGIC_1);
+			cout << "address ready " << endl;
 			break;
 
 		case kerlent_mult:
@@ -356,11 +358,11 @@ SC_MODULE(convolution_controller) {
 			if (counter_x_out.read() == "00000001") {
 				en_cty.write(SC_LOGIC_1);
 			}
-			rst_temp.write(SC_LOGIC_1);
 			nstate.write(stable2);
 			break;
 
 		case stable2:
+			rst_temp.write(SC_LOGIC_1);
 			if (counter_y_cout.read() == SC_LOGIC_1) {
 				nstate.write(done_state);
 			}
@@ -378,7 +380,7 @@ SC_MODULE(convolution_controller) {
 	// Constructor
 	SC_CTOR(convolution_controller) {
 		SC_METHOD(process_state_transition);
-		sensitive << clk.pos() << rst;
+		sensitive << clk << rst;
 
 		SC_METHOD(process_state_update);
 		sensitive << pstate << start << counter_j_out << counter_i_out << counter_y_cout << counter_y_out << counter_x_out;

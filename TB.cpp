@@ -52,8 +52,11 @@ void testbench::displaying()
 			//cout << A << " / " << B << " => Quotient = " << Q << " & Remainder = " << R << " - Time : " << sc_time_stamp() << endl;
 		//std::cout << "output" << q << endl;
 		//std::cout << "tesssst" << sel.read().to_uint() << endl;
-		std::cout << "done value = " << done << endl;
-		//std::cout << "output pattern = " << output_pattern << endl;
+		//std::cout << "done value = " << done_conv << endl;
+		//std::cout << "output1 " << data_out1_conv << endl;
+		//std::cout << "output2 " << data_out2_conv << endl;
+		//std::cout << "output3 " << data_out3_conv << endl;
+		//std::cout << "output4 " << data_out4_conv << endl;
 		wait();
 	}
 }

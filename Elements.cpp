@@ -85,12 +85,13 @@ void kernel_mux::eval() {
 
 void mult::eval() {
 	
-	sc_int<input_size> a_signed = a.read().to_int();
-	sc_int<input_size> b_signed = b.read().to_int();
+	sc_int<input_size> a_signed = a.read().to_uint();
+	sc_int<input_size> b_signed = b.read().to_uint();
 	sc_int<2 * input_size> temp_signed = a_signed * b_signed;
 	//cout << "a =  " << a << "b " << b << "res =" << temp_signed << endl;
 	temp.write(temp_signed);
-	output.write(temp.read().range(input_size - 1, 0));
+	output.write(a.read().to_uint() * b.read().to_uint());
+	//cout << "mult value" << output << " res = " << a_signed * b_signed << "a " << a << " b " << b << endl;
 }
 
 
@@ -100,6 +101,7 @@ void adder::eval() {
 	sc_int<input_size> b_signed = b.read().to_int();
 	sc_int<input_size> result_signed = a_signed + b_signed;
 	//cout << "a =  " << a << "b " << b << "res =" << result_signed << endl;
+	//cout << "add value" << output << " res = " << result_signed << "a " << a << " b " << b << endl;
 	output.write(result_signed);
 }
 
@@ -174,7 +176,7 @@ void resualt::do_compare() {
 		output.write("100");
 	}
 	else{
-		output.write("000");
+		output.write("001");
 	}
 }
 
