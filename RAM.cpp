@@ -29,4 +29,5 @@ void ram::do_read() {
 	else {
 		data_out.write(sc_lv<DATA_WIDTH>("00000000")); // Default value if address is out of range
 	}
+	std::cout << "address = " << address << "data out = " << data_out << endl;
 }

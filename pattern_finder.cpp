@@ -22,6 +22,6 @@ void patter_finder::do_kernel_bias() {
 			i++;
 		}
 	}
-	std::cout << "sucsess reading file and initializing kernel" << endl;
+	std::cout << "sucsess reading file and initializing kernel and bias" << endl;
 	input_file.close();
 }

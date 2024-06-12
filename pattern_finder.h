@@ -53,6 +53,7 @@ SC_MODULE(patter_finder) {
 	SC_CTOR(patter_finder) {
 		// Instantiate RAM module
 		ram1 = new ram("ram1");
+		ram1->clk(clk);
 		ram1->rst(rst);
 		ram1->address_in_read(address_out);
 		ram1->data_in(data_in);

@@ -1,31 +1,20 @@
 #include "TB.h"
 
 int sc_main(int argc, char* argv[]) {
-	sc_lv<8> init_kernels[3][9] = {
-		{
-			"00000000", "00000001", "00000000",
-			"00000001", "00000001", "00000001",
-			"00000000", "00000001", "00000000"
-		},
-		{
-			"00000001", "00000001", "00000001",
-			"00000001", "00000000", "00000000",
-			"00000001", "00000001", "00000001"
-		},
-		{
-			"00000001", "00000001", "00000001",
-			"00000000", "00000001", "00000000",
-			"00000000", "00000001", "00000000"
-		}
-	};
 
-	sc_lv<8> init_biases[3] = { "11111111", "11111110", "11111110" };
-	sc_lv<8> init_image_size = "00000100";
 	// Instantiate the testbench
 	testbench tb("testbench");
 
+	sc_trace_file* vcdfile;
+	vcdfile = sc_create_vcd_trace_file("patternFinder_test");
+	sc_trace(vcdfile, tb.start, "start");
+	sc_trace(vcdfile, tb.rst, "rst");
+	sc_trace(vcdfile, tb.clk, "clk");
+	sc_trace(vcdfile, tb.output_pattern, "output_pattern");
+	sc_trace(vcdfile, tb.done, "done");
+
 	// Start simulation
-	sc_start(2000, SC_NS);
+	sc_start(10000, SC_NS);
 
 	return 0;
 }

@@ -44,6 +44,7 @@ void mux::eval() {
 		out.write(a.read());
 		break;
 	}
+	//std::cout << name() << out << endl;
 }
 
 
@@ -78,14 +79,16 @@ void kernel_mux::eval() {
 	else {
 		output.write("00000000");
 	}
+	//std::cout << "kernel_mux_out = " << output << endl;
 }
 
 
 void mult::eval() {
+	
 	sc_int<input_size> a_signed = a.read().to_int();
 	sc_int<input_size> b_signed = b.read().to_int();
 	sc_int<2 * input_size> temp_signed = a_signed * b_signed;
-
+	//cout << "a =  " << a << "b " << b << "res =" << temp_signed << endl;
 	temp.write(temp_signed);
 	output.write(temp.read().range(input_size - 1, 0));
 }
@@ -96,7 +99,7 @@ void adder::eval() {
 	sc_int<input_size> a_signed = a.read().to_int();
 	sc_int<input_size> b_signed = b.read().to_int();
 	sc_int<input_size> result_signed = a_signed + b_signed;
-
+	//cout << "a =  " << a << "b " << b << "res =" << result_signed << endl;
 	output.write(result_signed);
 }
 
@@ -108,7 +111,6 @@ void counter::do_count() {
 		cout.write(sc_logic_0);
 	}
 	else if ((clk->event() && (clk == '1')) && en.read() == '1') {
-		std::cout << "sdafsdfas";
 		if (counter_out.read().to_uint() + 1 < counter_limit) {
 			counter_out.write(counter_out.read().to_uint() + 1);
 			cout.write(sc_logic_0);
@@ -121,6 +123,7 @@ void counter::do_count() {
 }
 
 void maxpool::do_maxpool() {
+	
 	sc_lv<data_width> max_var = a.read();
 
 	if (b.read().to_uint() > max_var.to_uint()) {
@@ -141,6 +144,7 @@ void maxpool::do_maxpool() {
 
 
 void relu::do_relu() {
+	
 	sc_int<data_width> a_signed = a.read().to_int();
 	sc_int<data_width> b_signed = b.read().to_int();
 	sc_int<data_width> c_signed = c.read().to_int();
@@ -155,18 +159,22 @@ void relu::do_relu() {
 
 
 void resualt::do_compare() {
-	output.write("000");
 
+	//cout << "a , b ,c " << a << b << c << endl;
+	
 	if (a.read().to_uint() > b.read().to_uint() && a.read().to_uint() > c.read().to_uint()) {
 		output.write("001");
 	}
 
-	if (b.read().to_uint() > a.read().to_uint() && b.read().to_uint() > c.read().to_uint()) {
+	else if (b.read().to_uint() > a.read().to_uint() && b.read().to_uint() > c.read().to_uint()) {
 		output.write("010");
 	}
 
-	if (c.read().to_uint() > b.read().to_uint() && c.read().to_uint() > a.read().to_uint()) {
+	else if (c.read().to_uint() > b.read().to_uint() && c.read().to_uint() > a.read().to_uint()) {
 		output.write("100");
+	}
+	else{
+		output.write("000");
 	}
 }
 

@@ -55,11 +55,17 @@ SC_MODULE(convolution_datapath) {
 	reg<8>* out4_reg;
 	kernel_mux* kernel_mux1;
 
-	void instantiate_modules() {
-		
+	void print(){
+
+		address_out.write(address_reg_out);
+
+		std::cout << "value = " << address_out << endl;
+
 	}
 
+
 	SC_CTOR(convolution_datapath){
+		
 		z_signal.write("zzzzzzzz");
 		// Instantiate counters
 		counter_i = new counter("counter_i", 3);
@@ -200,6 +206,10 @@ SC_MODULE(convolution_datapath) {
 		kernel_mux1->i(counter_i_out);
 		kernel_mux1->j(counter_j_out);
 		kernel_mux1->output(kernel_mux_out);
+		
+
+		SC_METHOD(print);
+		sensitive << address_reg_out;
 	}
 
 };
@@ -236,6 +246,7 @@ SC_MODULE(convolution_controller) {
 	// State update process
 	void process_state_update() {
 		// Default values for outputs
+		//std::cout << pstate << endl;
 		en_cti.write(SC_LOGIC_0);
 		done.write(SC_LOGIC_0);
 		en_ctj.write(SC_LOGIC_0);
@@ -403,6 +414,7 @@ SC_MODULE(convolution) {
 	// Submodule instances
 	convolution_datapath* datapath;
 	convolution_controller* controller;
+
 
 	// Constructor
 	SC_CTOR(convolution){

@@ -14,6 +14,7 @@ SC_MODULE(ram) {
 	static const int number_of_rows = 16;
 
 	// Ports
+	sc_in<sc_logic> clk;
 	sc_in<sc_logic> rst;
 	sc_in<sc_lv<DATA_WIDTH>> data_in;
 	sc_in<sc_lv<DATA_WIDTH>> address_in_wr, address_in_read;

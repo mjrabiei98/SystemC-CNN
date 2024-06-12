@@ -27,37 +27,23 @@ void testbench::clocking()
 
 void testbench::inGenerating()
 {
-	while (true)
-	{
+	
 		sig_image_size = "00000100";
-
-		a = "00000000";
-		b = "00000000";
-		c = "10000000";
-		d = "00011000";
-		e = "00011000";
-		sel = "010";
-		address_in_read = "00000000";
-		en.write(SC_LOGIC_1);
+		start = SC_LOGIC_0;
 		wait(60, SC_NS);
 
-		sel = "110";
-		m = "001100110011";
-		address_in_read = "00000001";
+		start = SC_LOGIC_1;
+		wait(60, SC_NS);
+		start = SC_LOGIC_0;
+
+
+		wait(1000, SC_NS);
 		wait(60, SC_NS);
 
 		wait(500, SC_NS);
-		sel = "011";
-		m = "001100000000";
-		address_in_read = "00000011";
 		wait(60, SC_NS);
 
-		wait(500, SC_NS);
-		sel = "000";
-		wait(60, SC_NS);
-
-		wait();
-	}
+		
 }
 
 void testbench::displaying()
@@ -67,7 +53,8 @@ void testbench::displaying()
 			//cout << A << " / " << B << " => Quotient = " << Q << " & Remainder = " << R << " - Time : " << sc_time_stamp() << endl;
 		//std::cout << "output" << q << endl;
 		//std::cout << "tesssst" << sel.read().to_uint() << endl;
-		std::cout << "ram value = " << data_out << endl;
+		std::cout << "done value = " << done << endl;
+		std::cout << "output pattern = " << output_pattern << endl;
 		wait();
 	}
 }
