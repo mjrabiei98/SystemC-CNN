@@ -307,17 +307,17 @@ SC_MODULE(convolution_controller) {
 			adder_mux_2_sel.write("011");
 			adr_reg_mux_sel.write("00");
 			address_reg_en.write(SC_LOGIC_1);
-			cout << "address ready " << endl;
+			//cout << "address ready " << endl;
 			break;
 
 		case kerlent_mult:
+			//std::cout << "kernel mult " << endl;
 			mult_mux_1_sel.write("01");
 			mult_mux_2_sel.write("01");
 			adder_mux_1_sel.write("10");
 			adder_mux_2_sel.write("010");
 			temp_reg_en.write(SC_LOGIC_1);
 			en_cti.write(SC_LOGIC_1);
-
 			if (counter_i_out.read() == "00000010") {
 				en_ctj.write(SC_LOGIC_1);
 			}
@@ -325,6 +325,8 @@ SC_MODULE(convolution_controller) {
 			break;
 
 		case stable:
+			//std::cout << "checking j " << endl;
+
 			if (counter_j_out.read() == "00000010" && counter_i_out.read() == "00000010") {
 				nstate.write(add_bias);
 			}
