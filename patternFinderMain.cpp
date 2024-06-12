@@ -10,7 +10,7 @@ int sc_main(int argc, char* argv[]) {
 	sc_trace(vcdfile, tb.start, "start");
 	sc_trace(vcdfile, tb.rst, "rst");
 	sc_trace(vcdfile, tb.clk, "clk");
-	sc_trace(vcdfile, tb.output_pattern, "output_pattern");
+	//sc_trace(vcdfile, tb.output_pattern, "output_pattern");
 	sc_trace(vcdfile, tb.done, "done");
 
 	// Start simulation

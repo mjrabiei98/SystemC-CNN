@@ -28,7 +28,6 @@ void testbench::clocking()
 void testbench::inGenerating()
 {
 	
-		sig_image_size = "00000100";
 		start = SC_LOGIC_0;
 		wait(60, SC_NS);
 
@@ -54,7 +53,7 @@ void testbench::displaying()
 		//std::cout << "output" << q << endl;
 		//std::cout << "tesssst" << sel.read().to_uint() << endl;
 		std::cout << "done value = " << done << endl;
-		std::cout << "output pattern = " << output_pattern << endl;
+		//std::cout << "output pattern = " << output_pattern << endl;
 		wait();
 	}
 }
