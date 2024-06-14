@@ -18,14 +18,13 @@ SC_MODULE(mux_5to1) {
 
 
 SC_MODULE(mux) {
-	// Ports
-	sc_in<sc_lv<8>> a, b, c, d;   // 8-bit input vectors
-	sc_in<sc_lv<2>> sel;          // 2-bit select input
-	sc_out<sc_lv<8>> out;         // 8-bit output vector
+	
+	sc_in<sc_lv<8>> a, b, c, d;   
+	sc_in<sc_lv<2>> sel;          
+	sc_out<sc_lv<8>> out;         
 
 	void eval();
 
-	// Constructor
 	SC_CTOR(mux) {
 		SC_METHOD(eval);
 		sensitive << a << b << c << d << sel;
@@ -55,20 +54,20 @@ SC_MODULE(kernel_mux) {
 
 
 SC_MODULE(mult) {
-	// Parameters
+
 	static const int input_size = 8;
 
-	// Ports
+
 	sc_in<sc_lv<input_size>> a, b;
 	sc_out<sc_lv<input_size>> output;
 
-	// Internal signal
+
 	sc_signal<sc_lv<2 * input_size>> temp;
 
-	// Process method
+
 	void eval();
 
-	// Constructor
+
 	SC_CTOR(mult) {
 		SC_METHOD(eval);
 		sensitive << a << b;
@@ -78,17 +77,17 @@ SC_MODULE(mult) {
 
 
 SC_MODULE(adder) {
-	// Parameters
+
 	static const int input_size = 8;
 
-	// Ports
+
 	sc_in<sc_lv<input_size>> a, b;
 	sc_out<sc_lv<input_size>> output;
 
-	// Process method
+
 	void eval();
 
-	// Constructor
+
 	SC_CTOR(adder) {
 		SC_METHOD(eval);
 		sensitive << a << b;
@@ -99,19 +98,18 @@ SC_MODULE(adder) {
 
 
 SC_MODULE(counter) {
-	// Parameters
 	static const int counter_size = 8;
 	int counter_limit;
 
-	// Ports
+
 	sc_in<sc_logic> clk, rst, en;
 	sc_out<sc_lv<counter_size>> counter_out;
 	sc_out<sc_logic> cout;
 
-	// Process method
+
 	void do_count();
 
-	// Constructor
+
 	SC_CTOR(counter) {
 		SC_METHOD(do_count);
 			sensitive << clk << rst;
@@ -125,17 +123,17 @@ SC_MODULE(counter) {
 
 
 SC_MODULE(maxpool) {
-	// Parameters
+	
 	static const int data_width = 8;
 
-	// Ports
+	
 	sc_in<sc_lv<data_width>> a, b, c, d;
 	sc_out<sc_lv<data_width>> output;
 
-	// Process method
+	
 	void do_maxpool();
 
-	// Constructor
+	
 	SC_CTOR(maxpool) {
 		SC_METHOD(do_maxpool);
 		sensitive << a << b << c << d;
@@ -144,17 +142,17 @@ SC_MODULE(maxpool) {
 
 
 SC_MODULE(relu) {
-	// Parameters
+	
 	static const int data_width = 8;
 
-	// Ports
+	
 	sc_in<sc_lv<data_width>> a, b, c, d;
 	sc_out<sc_lv<data_width>> d1, d2, d3, d4;
 
-	// Process method
+	
 	void do_relu();
 
-	// Constructor
+	
 	SC_CTOR(relu) {
 		SC_METHOD(do_relu);
 		sensitive << a << b << c << d;
@@ -164,17 +162,17 @@ SC_MODULE(relu) {
 
 
 SC_MODULE(resualt) {
-	// Parameters
+	
 	static const int data_width = 8;
 
-	// Ports
+	
 	sc_in<sc_lv<data_width>> a, b, c;
 	sc_out<sc_lv<3>> output;
 
-	// Process method
+	
 	void do_compare();
 
-	// Constructor
+	
 	SC_CTOR(resualt) {
 		SC_METHOD(do_compare);
 		sensitive << a << b << c;

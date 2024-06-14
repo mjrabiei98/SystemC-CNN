@@ -78,7 +78,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="convolution.cpp" />
     <ClCompile Include="Elements.cpp" />
     <ClCompile Include="patternFinderMain.cpp" />
     <ClCompile Include="pattern_finder.cpp" />

@@ -1,5 +1,5 @@
 $date
-     Jun 12, 2024       21:23:39
+     Jun 14, 2024       15:21:56
 $end
 
 $version
@@ -14,7 +14,8 @@ $scope module SystemC $end
 $var wire    1  aaaaa  start       $end
 $var wire    1  aaaab  rst       $end
 $var wire    1  aaaac  clk       $end
-$var wire    1  aaaad  done       $end
+$var wire    3  aaaad  output_pattern [2:0]  $end
+$var wire    1  aaaae  done       $end
 $upscope $end
 $enddefinitions  $end
 
@@ -26,7 +27,8 @@ $dumpvars
 0aaaaa
 0aaaab
 0aaaac
-0aaaad
+b1 aaaad
+0aaaae
 $end
 
 #18000
@@ -703,6 +705,7 @@ $end
 
 #3774000
 1aaaac
+b10 aaaad
 
 #3791000
 0aaaac
@@ -1045,6 +1048,7 @@ $end
 
 #5712000
 1aaaac
+b1 aaaad
 
 #5729000
 0aaaac
@@ -1393,7 +1397,7 @@ $end
 
 #7684000
 1aaaac
-1aaaad
+1aaaae
 
 #7701000
 0aaaac

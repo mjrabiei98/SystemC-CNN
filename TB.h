@@ -54,6 +54,7 @@ SC_MODULE(testbench) {
 		write_ram.write(SC_LOGIC_0);
 		data_in.write("00000000");
 		address_in_wr.write("00000000");
+		sig_image_size.write("00000100");
 
 		// Register processes
 		SC_THREAD(resetting);

@@ -1,7 +1,7 @@
 #include "RAM.h"
 
 
-void ram::do_ram() {
+void ram::initial_ram() {
 	std::ifstream input_file("input_paterns/input6.txt");
 	if (!input_file.is_open()) {
 		SC_REPORT_ERROR("RAM", "Failed to open input file.");

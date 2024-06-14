@@ -55,13 +55,6 @@ SC_MODULE(convolution_datapath) {
 	reg<8>* out4_reg;
 	kernel_mux* kernel_mux1;
 
-	void print(){
-
-		//address_out.write(address_reg_out);
-
-		//std::cout << "address out = " << address_out << endl;
-
-	}
 
 
 	SC_CTOR(convolution_datapath){
@@ -207,9 +200,6 @@ SC_MODULE(convolution_datapath) {
 		kernel_mux1->j(counter_j_out);
 		kernel_mux1->output(kernel_mux_out);
 		
-
-		SC_METHOD(print);
-		sensitive << clk;
 	}
 
 };
@@ -218,7 +208,7 @@ SC_MODULE(convolution_datapath) {
 
 
 SC_MODULE(convolution_controller) {
-	// Ports
+	
 	sc_in<sc_logic> clk, rst, start;
 	sc_in<sc_logic> counter_i_cout, counter_j_cout, counter_x_cout, counter_y_cout;
 	sc_in<sc_lv<8>> counter_x_out, counter_y_out, counter_i_out, counter_j_out;
@@ -229,13 +219,13 @@ SC_MODULE(convolution_controller) {
 	sc_out<sc_logic> done;
 	sc_out<sc_logic> rst_temp;
 
-	// Internal states
+	
 	enum state { idle, adr_gen1, adr_gen2, adr_gen3, adr_gen4, kerlent_mult, add_bias, load_output, done_state, stable, stable2 };
 	sc_signal<state> pstate, nstate;
 
-	// State transition process
+	
 	void process_state_transition() {
-		//std::cout << "state = " << pstate << endl;
+		
 		if (rst.read() == true) {
 			pstate.write(idle);
 		}
@@ -244,7 +234,7 @@ SC_MODULE(convolution_controller) {
 		}
 	}
 
-	// State update process
+	
 	void process_state_update() {
 		// Default values for outputs
 		//std::cout << pstate << endl;

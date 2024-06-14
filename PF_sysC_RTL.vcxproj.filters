@@ -24,9 +24,6 @@
     <ClCompile Include="RAM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="convolution.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pattern_finder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
