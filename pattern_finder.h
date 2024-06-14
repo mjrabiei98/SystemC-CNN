@@ -6,30 +6,27 @@
 #include "Elements.h"
 #include "RAM.h"
 
-// Define the kernel_array and bias_array types
-typedef sc_lv<8> kernel_type[3][9];
-typedef sc_lv<8> bias_array[3];
-
+template<int number_of_conv>
 SC_MODULE(patter_finder) {
-	// Parameters
+	
 	static const int data_width = 8;
-	static const int number_of_conv = 3;
+	//static const int number_of_conv = 3;
 	static const int kernel_size = 3;
 
-	// Inputs
+	
 	sc_signal<sc_lv<8>> kernels_array[3*9];
 	sc_signal<sc_lv<8>> biases[3];
 
 	sc_in<sc_lv<8>> image_size;
 
-	// Ports
+	
 	sc_in<sc_logic> clk, rst, start, write_ram;
 	sc_in<sc_lv<data_width>> data_in;
 	sc_in<sc_lv<data_width>> address_in_wr;
 	sc_out<sc_logic> done;
 	sc_out<sc_lv<3>> output_pattern;
 
-	// Internal signals
+	
 	sc_signal<sc_lv<data_width>> ram_data_out;
 	sc_signal<sc_logic> write_en, read_en;
 	sc_signal<sc_lv<data_width>> address_out;
@@ -40,18 +37,40 @@ SC_MODULE(patter_finder) {
 	sc_signal<sc_lv<8>> temp_adr[number_of_conv];
 	sc_signal<sc_logic> temp_done[number_of_conv];
 
-	// Submodule instances
+	
 	ram* ram1;
 	convolution* conv[number_of_conv];
 	relu* relu_units[number_of_conv];
 	maxpool* maxpool_units[number_of_conv];
 	resualt* result_unit;
 
-	void do_kernel_bias();
+	void do_kernel_bias() {
+		std::ifstream input_file("input_paterns/kernel.txt");
+		if (!input_file.is_open()) {
+			SC_REPORT_ERROR("RAM", "Failed to open input file.");
+			return;
+		}
+		std::string line;
+		int i = 0;
+		while (i < 30 && std::getline(input_file, line)) {
+			if (line.length() == 8) {
+				sc_lv<8> text_data(line.c_str());
+				if (i < 27){
+					kernels_array[i] = text_data;
+				}
+				else{
+					biases[i - 27] = text_data;
+				}
+				i++;
+			}
+		}
+		std::cout << "sucsess reading file and initializing kernel and bias" << endl;
+		input_file.close();
+	}
 
-	// Constructor
+	
 	SC_CTOR(patter_finder) {
-		// Instantiate RAM module
+		
 		ram1 = new ram("ram1");
 		ram1->clk(clk);
 		ram1->rst(rst);
@@ -65,7 +84,7 @@ SC_MODULE(patter_finder) {
 
 		
 
-		// Instantiate convolution, relu, and maxpool modules
+		
 		for (int i = 0; i < number_of_conv; ++i) {
 			std::string conv_name = "conv" + std::to_string(i);
 			conv[i] = new convolution(conv_name.c_str());
@@ -116,7 +135,7 @@ SC_MODULE(patter_finder) {
 		}
 		conv[0]->address_out(address_out);
 		conv[0]->done(done);
-		// Instantiate result unit
+		
 		result_unit = new resualt("result_unit");
 		result_unit->a(maxpools_output[0]);
 		result_unit->b(maxpools_output[1]);
@@ -125,4 +144,6 @@ SC_MODULE(patter_finder) {
 	}
 };
 
-#endif // PF_H
+
+
+#endif 

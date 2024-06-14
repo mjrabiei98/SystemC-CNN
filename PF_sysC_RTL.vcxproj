@@ -80,7 +80,6 @@
   <ItemGroup>
     <ClCompile Include="Elements.cpp" />
     <ClCompile Include="patternFinderMain.cpp" />
-    <ClCompile Include="pattern_finder.cpp" />
     <ClCompile Include="RAM.cpp" />
     <ClCompile Include="TB.cpp" />
   </ItemGroup>

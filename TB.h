@@ -26,12 +26,12 @@ SC_MODULE(testbench) {
 
 
 	// Instance of the patter_finder module
-	patter_finder* p_finder;
+	patter_finder<3>* p_finder;
 
 	// Constructor
 	SC_CTOR(testbench) {
 		// Instantiate the patter_finder module
-		p_finder = new patter_finder("p_finder");
+		p_finder = new patter_finder<3>("p_finder");
 		p_finder->image_size(sig_image_size);
 		p_finder->clk(clk);
 		p_finder->rst(rst);
